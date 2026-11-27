@@ -190,8 +190,11 @@
     text-align: center;
     min-width: 0;
   }
-  .hero-stat b { display: block; font-size: 12px; font-weight: 800; color: var(--wood-dark); letter-spacing: -0.02em; }
-  .hero-stat span { display: block; font-size: 9.5px; color: var(--muted); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .hero-stat b { display: block; font-size: 16px; font-weight: 800; color: var(--wood-dark); letter-spacing: -0.03em; line-height: 1.2; }
+  .hero-stat span { display: block; font-size: 9.5px; color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .hero.compact { padding: 13px 15px 12px; margin-bottom: 10px; }
+  .hero.compact .hero-stats { display: none; }
+  .hero.compact .hero-title { font-size: 17px; }
 
   /* 서브 탭 */
   .subnav {
@@ -738,7 +741,7 @@
       <div class="statrow" id="workStats"></div>
       <div class="section-title">가동 중인 정기 작업</div>
       <div class="card" id="jobList"></div>
-      <div class="section-title">일시중지 · 최근 실행 결과</div>
+      <div class="section-title">일시중지된 작업 · 마지막 결과</div>
       <div class="card" id="pausedList"></div>
     </div>
 
@@ -752,7 +755,7 @@
     <!-- 메모 -->
     <div class="panel" id="panel-memo">
       <div class="memo-form">
-        <textarea id="memoInput" placeholder="대표님 개인 메모 — 이 브라우저에만 저장됩니다.&#10;예) 수요일 오전 병원 · 렌터카 반납 시간 확인"></textarea>
+        <textarea id="memoInput" placeholder="대표님 개인 메모 — 이 브라우저에만 저장됩니다.&#10;예) 수요일 오후 렌터카 반납 확인 · 장보기 목록"></textarea>
         <div class="memo-actions">
           <span class="memo-hint">이 기기 브라우저에만 저장 · 서버 전송 없음</span>
           <button type="button" class="btn-primary" id="memoSave">메모 저장</button>
@@ -809,10 +812,10 @@
   /* ---------- 비서실 렌더 ---------- */
   function renderHero(office) {
     document.getElementById("heroSub").textContent =
-      (office.owner || "대표님 전용") + " · " + (office.greetingSub || "오늘도 비서들이 대기 중입니다");
+      office.tagline || ((office.owner || "대표님 전용") + " · 오늘도 비서들이 대기 중입니다");
     var stats = office.mapStats || [];
     document.getElementById("heroStats").innerHTML = stats.map(function (s) {
-      return '<div class="hero-stat"><b>' + esc(s.label) + "</b><span>" + esc(s.sub) + "</span></div>";
+      return '<div class="hero-stat"><b>' + esc(s.value) + "</b><span>" + esc(s.label) + "</span></div>";
     }).join("");
   }
 
@@ -948,6 +951,8 @@
     Array.prototype.forEach.call(document.querySelectorAll("#subnav button"), function (b) {
       b.classList.toggle("active", b.getAttribute("data-panel") === name);
     });
+    var hero = document.querySelector("#viewOffice .hero");
+    if (hero) hero.classList.toggle("compact", name !== "map");
     Array.prototype.forEach.call(document.querySelectorAll(".panel"), function (p) {
       p.classList.toggle("active", p.id === "panel-" + name);
     });
