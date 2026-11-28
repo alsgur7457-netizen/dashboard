@@ -649,15 +649,16 @@
   }
 
   .tline { list-style: none; margin-bottom: 4px; }
-  .titem { display: grid; grid-template-columns: 50px 1fr; gap: 11px; position: relative; padding-bottom: 10px; }
+  .titem { display: grid; grid-template-columns: 54px 1fr; gap: 12px; position: relative; padding-bottom: 10px; }
   .titem::before {
-    content: ""; position: absolute; left: 50px; top: 20px; bottom: 0;
+    content: ""; position: absolute; left: 59px; top: 20px; bottom: 0;
     width: 1px; background: var(--border);
   }
   .titem:last-child::before { display: none; }
   .titem .tt {
     font-size: 12px; font-weight: 800; color: var(--wood);
-    padding-top: 8px; text-align: right; letter-spacing: -0.02em;
+    padding-top: 8px; text-align: right; letter-spacing: -0.03em;
+    white-space: nowrap;
   }
   .titem .tbody {
     position: relative;
@@ -669,7 +670,7 @@
     min-width: 0;
   }
   .titem .tbody::before {
-    content: ""; position: absolute; left: -15px; top: 13px;
+    content: ""; position: absolute; left: -10px; top: 13px;
     width: 7px; height: 7px; border-radius: 50%;
     background: var(--wood); box-shadow: 0 0 0 3px var(--wood-soft);
   }
