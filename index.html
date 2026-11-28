@@ -86,7 +86,7 @@
   /* 최상위 뷰 전환 */
   .viewtabs {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: 4px;
     background: #EFE4D2;
     border: 1px solid var(--border);
@@ -99,12 +99,13 @@
     background: transparent;
     color: var(--muted);
     font: inherit;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
-    padding: 9px 6px;
+    line-height: 1.25;
+    padding: 8px 3px;
     border-radius: 11px;
     cursor: pointer;
-    white-space: nowrap;
+    word-break: keep-all;
   }
   .viewtabs button.active {
     background: var(--card);
@@ -561,6 +562,149 @@
     line-height: 1.6;
   }
 
+  /* ===== 여행 일정 ===== */
+  .trip-hero {
+    background: linear-gradient(165deg, #FFFCF5 0%, #F2E7D2 100%);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+  }
+  .trip-hero::after {
+    content: "";
+    position: absolute;
+    right: -46px; top: -56px;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(214, 178, 128, 0.3), rgba(214, 178, 128, 0));
+  }
+  .trip-kicker {
+    position: relative;
+    font-size: 10.5px; font-weight: 800; letter-spacing: 0.07em;
+    color: var(--wood);
+  }
+  .trip-title {
+    position: relative;
+    font-size: 20px; font-weight: 800; letter-spacing: -0.02em;
+    color: #3B2C1F; margin-top: 3px;
+  }
+  .trip-sub { position: relative; font-size: 12.5px; color: #7E6A55; margin-top: 4px; }
+  .trip-stats {
+    position: relative;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 12px;
+  }
+  .trip-stat {
+    background: rgba(255, 253, 248, 0.78);
+    border: 1px solid #EADCC7;
+    border-radius: 11px;
+    padding: 8px 4px;
+    text-align: center;
+    min-width: 0;
+  }
+  .trip-stat b { display: block; font-size: 14px; font-weight: 800; color: var(--wood-dark); letter-spacing: -0.02em; }
+  .trip-stat span { display: block; font-size: 9.5px; color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .trip-linkrow { position: relative; display: flex; gap: 7px; margin-top: 11px; }
+  .trip-linkrow button {
+    flex: 1 1 auto;
+    border: 1px solid #DCC3A0;
+    background: rgba(255, 253, 248, 0.9);
+    color: var(--wood-dark);
+    font: inherit; font-size: 11.5px; font-weight: 800;
+    padding: 8px 10px; border-radius: 10px; cursor: pointer;
+  }
+  .trip-linkrow button:active { background: var(--wood-soft); }
+
+  .daynav { display: flex; gap: 6px; margin-bottom: 4px; }
+  .daynav button {
+    flex: 1 1 0;
+    border: 1px solid var(--border);
+    background: #FBF4E8;
+    color: #7E6A55;
+    font: inherit; font-size: 11.5px; font-weight: 800;
+    padding: 8px 6px; border-radius: 999px; cursor: pointer;
+    white-space: nowrap;
+  }
+  .daynav button:active { background: var(--wood-soft); }
+
+  .dayhead {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 8px;
+    margin: 18px 2px 1px;
+    scroll-margin-top: 12px;
+  }
+  .dayhead .dh-date { font-size: 14.5px; font-weight: 800; color: var(--wood-dark); }
+  .dayhead .dh-meta { font-size: 11px; color: var(--muted); flex: 0 0 auto; }
+  .day-sub { font-size: 12px; color: #6E5B48; margin: 0 2px 8px; }
+  .daynote {
+    font-size: 11.5px;
+    color: #7E6A55;
+    background: #FBF4E8;
+    border: 1px dashed #E2D2B9;
+    border-radius: 11px;
+    padding: 9px 11px;
+    margin-bottom: 10px;
+    line-height: 1.45;
+  }
+
+  .tline { list-style: none; margin-bottom: 4px; }
+  .titem { display: grid; grid-template-columns: 50px 1fr; gap: 11px; position: relative; padding-bottom: 10px; }
+  .titem::before {
+    content: ""; position: absolute; left: 50px; top: 20px; bottom: 0;
+    width: 1px; background: var(--border);
+  }
+  .titem:last-child::before { display: none; }
+  .titem .tt {
+    font-size: 12px; font-weight: 800; color: var(--wood);
+    padding-top: 8px; text-align: right; letter-spacing: -0.02em;
+  }
+  .titem .tbody {
+    position: relative;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 9px 11px;
+    box-shadow: var(--shadow);
+    min-width: 0;
+  }
+  .titem .tbody::before {
+    content: ""; position: absolute; left: -15px; top: 13px;
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--wood); box-shadow: 0 0 0 3px var(--wood-soft);
+  }
+  .titem.key .tbody { border-color: #DCC3A0; background: #FFFCF4; }
+  .titem.key .tbody::before { background: var(--red); box-shadow: 0 0 0 3px #F6DFD7; }
+  .titem.key .tt { color: var(--red); }
+  .titem .ttitle { font-size: 13px; font-weight: 800; line-height: 1.35; }
+  .titem .tdesc { font-size: 11.5px; color: #5A4A3B; margin-top: 2px; line-height: 1.45; }
+
+  .ckgrid { display: grid; gap: 8px; }
+  .ckcard {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 12px 13px; box-shadow: var(--shadow);
+  }
+  .ckcard h4 {
+    font-size: 11px; font-weight: 800; color: var(--muted);
+    letter-spacing: 0.04em; margin-bottom: 3px;
+  }
+  .ckcard ul { list-style: none; }
+  .ckcard li {
+    font-size: 12.5px; color: #46392D;
+    padding-left: 20px; position: relative; margin-top: 5px; line-height: 1.45;
+  }
+  .ckcard li::before {
+    content: "\2610"; position: absolute; left: 1px; top: -1px;
+    color: var(--wood); font-size: 13px;
+  }
+  .tiplist { list-style: none; }
+  .tiplist li {
+    font-size: 12.5px; color: #46392D;
+    padding-left: 13px; position: relative; margin-top: 7px; line-height: 1.5;
+  }
+  .tiplist li::before { content: "•"; position: absolute; left: 0; color: var(--wood); }
+  .tiplist li:first-child { margin-top: 0; }
+
   /* 현황 대시보드 */
   .alert-banner {
     background: var(--red-bg);
@@ -662,16 +806,17 @@
 
   <nav class="viewtabs" id="viewTabs">
     <button type="button" data-view="office" class="active">🏢 비서실</button>
-    <button type="button" data-view="dash">📊 현황 대시보드</button>
+    <button type="button" data-view="dash">📊 현황</button>
+    <button type="button" data-view="trip">✈️ 여행 일정</button>
   </nav>
 
   <div class="error-box" id="errorBox">
-    <strong>데이터를 불러오지 못했습니다</strong>
-    <span id="errorDetail">data.json 응답을 확인하지 못했습니다.</span>
+    <strong id="errorTitle">대시보드 데이터를 불러오는 중입니다…</strong>
+    <span id="errorDetail">data.json을 읽어 최신 현황을 준비하고 있어요.</span>
   </div>
 
   <!-- ================= 비서실 ================= -->
-  <section class="view active" id="viewOffice">
+  <section class="view active" id="viewOffice" data-view="office">
     <div class="hero">
       <div class="hero-top">
         <div class="hero-title">Bigmao 비서실</div>
@@ -766,8 +911,22 @@
   </section>
 
   <!-- ================= 현황 대시보드 ================= -->
-  <section class="view" id="viewDash">
+  <section class="view" id="viewDash" data-view="dash">
     <div id="dashBody"><div class="skeleton">현황을 불러오는 중…</div></div>
+  </section>
+
+  <!-- ================= 여행 일정 ================= -->
+  <section class="view" id="viewTrip" data-view="trip">
+    <div class="trip-hero">
+      <div class="trip-kicker">TRIP PLAN · 부부 2인</div>
+      <div class="trip-title" id="tripTitle">대마도 1박 2일</div>
+      <div class="trip-sub" id="tripSub">11/29(일) ~ 11/30(월) · 함께 보는 일정</div>
+      <div class="trip-stats" id="tripStats"></div>
+      <div class="trip-linkrow">
+        <button type="button" id="tripCopyLink">🔗 여행 일정 링크 복사</button>
+      </div>
+    </div>
+    <div id="tripBody"><div class="skeleton">여행 일정을 불러오는 중…</div></div>
   </section>
 
   <footer>
@@ -784,15 +943,18 @@
   var app = document.getElementById("dashBody");
   var updatedEl = document.getElementById("updated");
   var errorBox = document.getElementById("errorBox");
+  var errorTitle = document.getElementById("errorTitle");
   var errorDetail = document.getElementById("errorDetail");
   var refreshBtn = document.getElementById("refreshBtn");
   var pageTitle = document.getElementById("pageTitle");
   var toastEl = document.getElementById("toast");
+  var tripHost = document.getElementById("tripBody");
 
   var MEMO_KEY = "bigmao_memo_v1";
   var data = null;
   var currentRoom = "대회의실";
   var toastTimer = null;
+  var tripRendered = false;
 
   function esc(v) {
     return String(v == null ? "" : v).replace(/[&<>"']/g, function (c) {
@@ -936,14 +1098,42 @@
   }
 
   /* ---------- 네비게이션 ---------- */
-  function showView(view) {
+  var VIEW_META = {
+    office: { tab: "Bigmao 비서실", doc: "Bigmao 비서실 · 대표님 전용" },
+    dash: { tab: "현황 대시보드", doc: "현황 대시보드 · Bigmao" },
+    trip: { tab: "여행 일정", doc: "대마도 여행 일정 · Bigmao" }
+  };
+  var currentView = "office";
+
+  function normalizeView(v) {
+    return Object.prototype.hasOwnProperty.call(VIEW_META, v) ? v : "office";
+  }
+  function viewFromHash() {
+    var raw = String(window.location.hash || "").replace(/^#\/?/, "");
+    try { raw = decodeURIComponent(raw); } catch (e) {}
+    raw = raw.toLowerCase();
+    if (raw === "trip" || raw === "travel" || raw === "여행" || raw === "여행일정" || raw === "여행-일정") return "trip";
+    if (raw === "dash" || raw === "dashboard" || raw === "현황" || raw === "현황대시보드") return "dash";
+    return "office";
+  }
+  function setHash(view) {
+    var next = "#" + view;
+    if (window.location.hash === next) return;
+    if (window.history && window.history.replaceState) window.history.replaceState(null, "", next);
+    else window.location.hash = view;
+  }
+  function showView(view, opts) {
+    var v = normalizeView(view);
+    currentView = v;
     Array.prototype.forEach.call(document.querySelectorAll("#viewTabs button"), function (b) {
-      b.classList.toggle("active", b.getAttribute("data-view") === view);
+      b.classList.toggle("active", b.getAttribute("data-view") === v);
     });
-    document.getElementById("viewOffice").classList.toggle("active", view === "office");
-    document.getElementById("viewDash").classList.toggle("active", view === "dash");
-    pageTitle.textContent = view === "office" ? "Bigmao 비서실" : "현황 대시보드";
-    document.title = view === "office" ? "Bigmao 비서실 · 대표님 전용" : "현황 대시보드 · Bigmao";
+    Array.prototype.forEach.call(document.querySelectorAll("section.view"), function (s) {
+      s.classList.toggle("active", s.getAttribute("data-view") === v);
+    });
+    pageTitle.textContent = VIEW_META[v].tab;
+    document.title = VIEW_META[v].doc;
+    if (!opts || opts.hash !== false) setHash(v);
     window.scrollTo(0, 0);
   }
 
@@ -977,6 +1167,13 @@
   document.getElementById("viewTabs").addEventListener("click", function (e) {
     var b = e.target.closest("button[data-view]");
     if (b) showView(b.getAttribute("data-view"));
+  });
+  window.addEventListener("hashchange", function () {
+    var v = viewFromHash();
+    if (v !== currentView) showView(v, { hash: false });
+  });
+  document.getElementById("tripCopyLink").addEventListener("click", function () {
+    copyText(window.location.origin + window.location.pathname + "#trip");
   });
   document.getElementById("subnav").addEventListener("click", function (e) {
     var b = e.target.closest("button[data-panel]");
@@ -1127,6 +1324,68 @@
       renderRoutines(d.routines) + renderMonitoring(d.monitoring);
   }
 
+  /* ---------- 여행 일정 ---------- */
+  function renderTrip(trip) {
+    if (!tripHost) return;
+    if (!trip) {
+      tripHost.innerHTML = '<div class="memo-empty">표시할 여행 일정이 없습니다.</div>';
+      return;
+    }
+    if (trip.title) document.getElementById("tripTitle").textContent = trip.title;
+    var sub = [];
+    if (trip.dates) sub.push(trip.dates);
+    if (trip.tagline) sub.push(trip.tagline);
+    document.getElementById("tripSub").textContent = sub.join(" · ");
+
+    document.getElementById("tripStats").innerHTML = (trip.stats || []).map(function (s) {
+      return '<div class="trip-stat"><b>' + esc(s.value) + "</b><span>" + esc(s.label) + "</span></div>";
+    }).join("");
+
+    var nav = (trip.days || []).map(function (d) {
+      return '<button type="button" data-day="' + esc(d.id) + '">' + esc(d.label) + " " + esc(d.date) + "</button>";
+    }).join("");
+
+    var days = (trip.days || []).map(function (d) {
+      var items = (d.items || []).map(function (it) {
+        return '<li class="titem' + (it.tone === "key" ? " key" : "") + '">' +
+          '<div class="tt">' + esc(it.time) + "</div>" +
+          '<div class="tbody"><div class="ttitle">' + esc(it.title) + "</div>" +
+          (it.desc ? '<div class="tdesc">' + esc(it.desc) + "</div>" : "") +
+          "</div></li>";
+      }).join("");
+      return '<div class="dayhead" id="day-' + esc(d.id) + '">' +
+        '<div class="dh-date">' + esc(d.label) + " · " + esc(d.date) + "</div>" +
+        '<div class="dh-meta">' + (d.items || []).length + "개 일정</div></div>" +
+        (d.title ? '<div class="day-sub">' + esc(d.title) + "</div>" : "") +
+        (d.note ? '<div class="daynote">' + esc(d.note) + "</div>" : "") +
+        '<ol class="tline">' + items + "</ol>";
+    }).join("");
+
+    var checklist = (trip.checklist || []).map(function (g) {
+      return '<div class="ckcard"><h4>' + esc(g.group) + "</h4><ul>" +
+        (g.items || []).map(function (t) { return "<li>" + esc(t) + "</li>"; }).join("") +
+        "</ul></div>";
+    }).join("");
+
+    var tips = (trip.tips || []).map(function (t) { return "<li>" + esc(t) + "</li>"; }).join("");
+
+    tripHost.innerHTML =
+      (nav ? '<div class="daynav">' + nav + "</div>" : "") +
+      days +
+      (checklist ? '<div class="section-title">🎒 출발 전 체크리스트</div><div class="ckgrid">' + checklist + "</div>" : "") +
+      (tips ? '<div class="section-title">💡 현지 팁</div><div class="card"><ul class="tiplist">' + tips + "</ul></div>" : "");
+
+    Array.prototype.forEach.call(tripHost.querySelectorAll(".daynav button"), function (btn) {
+      btn.addEventListener("click", function () {
+        var target = document.getElementById("day-" + btn.getAttribute("data-day"));
+        if (!target) return;
+        if (target.scrollIntoView) target.scrollIntoView({ behavior: "smooth", block: "start" });
+        else target.scrollIntoView();
+      });
+    });
+    tripRendered = true;
+  }
+
   /* ---------- 로드 ---------- */
   function load(isManual) {
     if (isManual) {
@@ -1144,6 +1403,7 @@
         data = d;
         if (d.secretariat) renderOffice(d.secretariat);
         renderDash(d);
+        renderTrip(d.trip);
         updatedEl.textContent = "업데이트: " + (d.updated || "시각 미상");
         updatedEl.classList.remove("stale");
         if (isManual) {
@@ -1154,8 +1414,10 @@
       })
       .catch(function (err) {
         if (!app.querySelector(".alert-banner")) app.innerHTML = '<div class="skeleton">표시할 현황이 없습니다.</div>';
+        if (tripHost && !tripRendered) tripHost.innerHTML = '<div class="memo-empty">여행 일정을 불러오지 못했습니다.<br />새로고침하면 다시 시도합니다.</div>';
         updatedEl.textContent = "업데이트 실패";
         updatedEl.classList.add("stale");
+        errorTitle.textContent = "데이터를 불러오지 못했습니다";
         errorDetail.textContent = "data.json을 불러오지 못했습니다 (" +
           (err && err.message ? err.message : "네트워크 오류") +
           "). 같은 폴더에 data.json이 있는지, 잠시 후 새로고침으로 다시 시도해 주세요.";
@@ -1169,6 +1431,7 @@
 
   refreshBtn.addEventListener("click", function () { load(true); });
   renderMemos();
+  showView(viewFromHash(), { hash: false });
   load(false);
 })();
 </script>
