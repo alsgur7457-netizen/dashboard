@@ -679,6 +679,56 @@
   .titem.key .tt { color: var(--red); }
   .titem .ttitle { font-size: 13px; font-weight: 800; line-height: 1.35; }
   .titem .tdesc { font-size: 11.5px; color: #5A4A3B; margin-top: 2px; line-height: 1.45; }
+  .titem .trow { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+  .titem .trow .ttitle { flex: 1 1 auto; min-width: 0; }
+  .titem .tbadge {
+    flex: 0 0 auto;
+    font-size: 9.5px; font-weight: 800; letter-spacing: -0.01em;
+    padding: 2px 6px; border-radius: 999px; margin-top: 1px;
+    white-space: nowrap;
+  }
+  .titem .tbadge.none { display: none; }
+  .titem .tbadge.done { color: #3F6B4C; background: var(--green-bg); border: 1px solid #CFE2D4; }
+  .titem .tbadge.next { color: #FFF8EC; background: var(--red); border: 1px solid var(--red); }
+  .titem[data-key] { cursor: pointer; }
+  .titem.done .tbody { background: #F7F2E9; border-color: #E6DAC6; box-shadow: none; }
+  .titem.done .tbody::before { background: var(--green); box-shadow: 0 0 0 3px var(--green-bg); }
+  .titem.done .tt { color: #A79580; }
+  .titem.done .ttitle { color: #8E7F6C; text-decoration: line-through; text-decoration-color: #C3B29D; }
+  .titem.done .tdesc { color: #A2937F; }
+  .titem.next .tbody { border-color: #E0A28F; box-shadow: 0 3px 12px rgba(180, 82, 63, 0.14); }
+  .titem.next .tbody::before { background: var(--red); box-shadow: 0 0 0 4px #F6DFD7; }
+  .titem.next .ttitle { color: #3A2E24; }
+  .titem:focus-visible { outline: none; }
+  .titem:focus-visible .tbody { outline: 2px solid #DCC3A0; outline-offset: 1px; }
+
+  .trip-progress {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 11px 13px 10px;
+    margin-bottom: 10px;
+    box-shadow: var(--shadow);
+  }
+  .tp-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .tp-label { font-size: 11.5px; font-weight: 800; color: var(--wood-dark); letter-spacing: -0.01em; }
+  .tp-count { font-size: 11.5px; font-weight: 800; color: var(--wood); }
+  .tp-next { font-size: 11px; color: #7E6A55; margin-top: 6px; line-height: 1.45; }
+  .tp-next b { color: var(--red); font-weight: 800; }
+  .tp-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 7px; }
+  .tp-hint { font-size: 9.5px; color: #A5947F; line-height: 1.4; }
+  .tp-reset {
+    flex: 0 0 auto;
+    border: 1px solid var(--border); background: #FBF4E8; color: #8A7663;
+    font: inherit; font-size: 10px; font-weight: 700;
+    padding: 4px 7px; border-radius: 8px; cursor: pointer;
+  }
+  .tp-reset[hidden] { display: none; }
+  .daybar { height: 4px; background: #EDE3D4; border-radius: 999px; overflow: hidden; margin: 0 2px 9px; }
+  .daybar-fill { height: 100%; width: 0; background: var(--wood); border-radius: 999px; transition: width .3s ease; }
+  .daybar-fill.all { background: var(--green); }
+  .dh-meta b { font-weight: 800; color: var(--wood); }
+  .dh-meta b.all { color: var(--green); }
 
   .ckgrid { display: grid; gap: 8px; }
   .ckcard {
@@ -806,9 +856,9 @@
   </header>
 
   <nav class="viewtabs" id="viewTabs">
-    <button type="button" data-view="office" class="active">🏢 비서실</button>
+    <button type="button" data-view="trip" class="active">✈️ 여행 일정</button>
+    <button type="button" data-view="office">🏢 비서실</button>
     <button type="button" data-view="dash">📊 현황</button>
-    <button type="button" data-view="trip">✈️ 여행 일정</button>
   </nav>
 
   <div class="error-box" id="errorBox">
@@ -817,7 +867,7 @@
   </div>
 
   <!-- ================= 비서실 ================= -->
-  <section class="view active" id="viewOffice" data-view="office">
+  <section class="view" id="viewOffice" data-view="office">
     <div class="hero">
       <div class="hero-top">
         <div class="hero-title">Bigmao 비서실</div>
@@ -917,7 +967,7 @@
   </section>
 
   <!-- ================= 여행 일정 ================= -->
-  <section class="view" id="viewTrip" data-view="trip">
+  <section class="view active" id="viewTrip" data-view="trip">
     <div class="trip-hero">
       <div class="trip-kicker">TRIP PLAN · 부부 2인</div>
       <div class="trip-title" id="tripTitle">대마도 1박 2일</div>
@@ -1104,10 +1154,11 @@
     dash: { tab: "현황 대시보드", doc: "현황 대시보드 · Bigmao" },
     trip: { tab: "여행 일정", doc: "대마도 여행 일정 · Bigmao" }
   };
-  var currentView = "office";
+  var currentView = "trip";
+  var DEFAULT_VIEW = "trip";
 
   function normalizeView(v) {
-    return Object.prototype.hasOwnProperty.call(VIEW_META, v) ? v : "office";
+    return Object.prototype.hasOwnProperty.call(VIEW_META, v) ? v : DEFAULT_VIEW;
   }
   function viewFromHash() {
     var raw = String(window.location.hash || "").replace(/^#\/?/, "");
@@ -1115,7 +1166,8 @@
     raw = raw.toLowerCase();
     if (raw === "trip" || raw === "travel" || raw === "여행" || raw === "여행일정" || raw === "여행-일정") return "trip";
     if (raw === "dash" || raw === "dashboard" || raw === "현황" || raw === "현황대시보드") return "dash";
-    return "office";
+    if (raw === "office" || raw === "비서실" || raw === "비서") return "office";
+    return DEFAULT_VIEW;
   }
   function setHash(view) {
     var next = "#" + view;
@@ -1273,12 +1325,14 @@
     return '<section class="alert-banner"><div class="alert-title">⚠️ 확인 필요 이슈 (' + list.length + "건)</div>" +
       '<ul class="alert-list">' + items + "</ul></section>";
   }
-  function renderKpis(list) {
+  function renderKpis(list, trip) {
     if (!list || !list.length) return "";
+    var st = trip ? tripDayStatus(trip) : null;
     var cells = list.map(function (k) {
+      var value = k.auto === "dday" && st ? st.value : k.value;
       return '<div class="kpi ' + toneClass(k.tone) + '">' +
         '<div class="kpi-label">' + esc(k.label) + "</div>" +
-        '<div class="kpi-val">' + esc(k.value) + "</div>" +
+        '<div class="kpi-val">' + esc(value) + "</div>" +
         (k.sub ? '<div class="kpi-sub">' + esc(k.sub) + "</div>" : "") + "</div>";
     }).join("");
     return '<section class="kpi-grid">' + cells + "</section>";
@@ -1309,29 +1363,185 @@
     }).join("");
     return '<div class="section-title">🤖 매일 자동 루틴</div>' + cards;
   }
-  function renderMonitoring(list) {
+  function renderMonitoring(list, trip) {
     if (!list || !list.length) return "";
+    var st = trip ? tripDayStatus(trip) : null;
     var cards = list.map(function (m) {
+      var badge = m.auto === "dday" && st ? st.value : m.badge;
       return '<div class="card"><div class="card-head">' +
         '<div class="card-title">' + esc(m.title) + "</div>" +
-        '<span class="pill ' + toneClass(m.tone) + '">' + esc(m.badge) + "</span></div>" +
+        '<span class="pill ' + toneClass(m.tone) + '">' + esc(badge) + "</span></div>" +
         '<div class="card-desc">' + esc(m.desc) + "</div>" +
         (m.meta ? '<div class="card-meta">' + esc(m.meta) + "</div>" : "") + "</div>";
     }).join("");
     return '<div class="section-title">📌 주요 진행·모니터링</div>' + cards;
   }
   function renderDash(d) {
-    app.innerHTML = renderIssues(d.issues) + renderKpis(d.kpis) + renderSchedule(d.schedule) +
-      renderRoutines(d.routines) + renderMonitoring(d.monitoring);
+    app.innerHTML = renderIssues(d.issues) + renderKpis(d.kpis, d.trip) + renderSchedule(d.schedule) +
+      renderRoutines(d.routines) + renderMonitoring(d.monitoring, d.trip);
   }
 
   /* ---------- 여행 일정 ---------- */
+  var TRIP_OVERRIDE_KEY = "bigmao_trip_manual_v1";
+  var tripItems = [];
+  var tripData = null;
+
+  function readTripOverrides() {
+    try {
+      var raw = localStorage.getItem(TRIP_OVERRIDE_KEY);
+      var obj = raw ? JSON.parse(raw) : {};
+      return obj && typeof obj === "object" && !Array.isArray(obj) ? obj : {};
+    } catch (e) { return {}; }
+  }
+  function writeTripOverrides(obj) {
+    try { localStorage.setItem(TRIP_OVERRIDE_KEY, JSON.stringify(obj)); }
+    catch (e) { toast("수동 표시를 저장하지 못했습니다"); }
+  }
+  function parseDay(v) {
+    var m = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(String(v || ""));
+    return m ? { y: +m[1], m: +m[2], d: +m[3] } : null;
+  }
+  function kstToday() {
+    var d = new Date(Date.now() + 9 * 3600 * 1000);
+    return { y: d.getUTCFullYear(), m: d.getUTCMonth() + 1, d: d.getUTCDate() };
+  }
+  function tripDayStatus(trip) {
+    var s = parseDay(trip && trip.startDate);
+    var e = parseDay(trip && trip.endDate);
+    if (!s || !e) return null;
+    var t = kstToday();
+    var today = Date.UTC(t.y, t.m - 1, t.d);
+    var start = Date.UTC(s.y, s.m - 1, s.d);
+    var end = Date.UTC(e.y, e.m - 1, e.d);
+    if (today < start) {
+      return { value: "D-" + Math.round((start - today) / 86400000), label: "출발까지" };
+    }
+    if (today <= end) {
+      var day = Math.round((today - start) / 86400000) + 1;
+      var last = Math.round((end - start) / 86400000) + 1;
+      if (day === 1) return { value: "D-DAY", label: "출국일" };
+      return { value: day + "일차", label: day >= last ? "귀국일" : "여행 중" };
+    }
+    return { value: "완료", label: "여행 종료" };
+  }
+  function updateTripHeroStats() {
+    if (!tripData) return;
+    var host = document.getElementById("tripStats");
+    if (!host) return;
+    var st = tripDayStatus(tripData);
+    var cell = host.querySelector('[data-auto="dday"]');
+    if (!cell || !st) return;
+    var b = cell.querySelector("b");
+    var s = cell.querySelector("span");
+    if (b) b.textContent = st.value;
+    if (s) s.textContent = st.label;
+  }
+  function updateTripStates() {
+    if (!tripItems.length || !tripHost) return;
+    var now = Date.now();
+    var ov = readTripOverrides();
+    var total = tripItems.length;
+    var doneCount = 0;
+    var dayTotals = {};
+    var dayDone = {};
+
+    tripItems.forEach(function (it) {
+      dayTotals[it.dayId] = (dayTotals[it.dayId] || 0) + 1;
+      var at = it.at ? Date.parse(it.at) : NaN;
+      var done = isNaN(at) ? false : now >= at;
+      if (Object.prototype.hasOwnProperty.call(ov, it.key)) done = !!ov[it.key];
+      it.done = done;
+      if (done) {
+        doneCount++;
+        dayDone[it.dayId] = (dayDone[it.dayId] || 0) + 1;
+      }
+    });
+
+    var next = null;
+    var i;
+    for (i = 0; i < tripItems.length; i++) {
+      if (tripItems[i].done) continue;
+      var nat = tripItems[i].at ? Date.parse(tripItems[i].at) : NaN;
+      if (isNaN(nat) || nat >= now) { next = tripItems[i]; break; }
+    }
+    for (i = 0; i < tripItems.length && !next; i++) {
+      if (!tripItems[i].done) next = tripItems[i];
+    }
+
+    tripItems.forEach(function (it) {
+      if (it.el) {
+        it.el.classList.toggle("done", !!it.done);
+        it.el.classList.toggle("next", next === it);
+      }
+      if (!it.badgeEl) return;
+      if (it.done) {
+        it.badgeEl.className = "tbadge done";
+        it.badgeEl.textContent = "✓ 완료";
+      } else if (next === it) {
+        it.badgeEl.className = "tbadge next";
+        it.badgeEl.textContent = "다음";
+      } else {
+        it.badgeEl.className = "tbadge none";
+        it.badgeEl.textContent = "";
+      }
+    });
+
+    Object.keys(dayTotals).forEach(function (id) {
+      var t = dayTotals[id];
+      var dn = dayDone[id] || 0;
+      var all = t > 0 && dn >= t;
+      var label = tripHost.querySelector('[data-daycount="' + id + '"]');
+      if (label) {
+        label.textContent = "완료 " + dn + " / " + t;
+        label.classList.toggle("all", all);
+      }
+      var bar = tripHost.querySelector('[data-daybar="' + id + '"]');
+      if (bar) {
+        bar.style.width = (t ? Math.round((dn * 100) / t) : 0) + "%";
+        bar.classList.toggle("all", all);
+      }
+    });
+
+    var pctAll = total ? Math.round((doneCount * 100) / total) : 0;
+    var countEl = document.getElementById("tpCount");
+    if (countEl) countEl.textContent = "완료 " + doneCount + " / " + total;
+    var barEl = document.getElementById("tpBar");
+    if (barEl) {
+      barEl.style.width = pctAll + "%";
+      barEl.classList.toggle("done", total > 0 && doneCount >= total);
+      barEl.classList.toggle("wait", doneCount === 0);
+    }
+    var nextEl = document.getElementById("tpNext");
+    if (nextEl) {
+      if (!total) nextEl.textContent = "";
+      else if (!next) nextEl.innerHTML = "<b>모든 일정 완료</b> · 수고하셨습니다";
+      else nextEl.innerHTML = "다음 일정 · <b>" + esc(next.time) + "</b> " + esc(next.title);
+    }
+    var resetEl = document.getElementById("tpReset");
+    if (resetEl) resetEl.hidden = Object.keys(ov).length === 0;
+    updateTripHeroStats();
+  }
+  function toggleTripItem(key) {
+    var it = null;
+    for (var i = 0; i < tripItems.length; i++) {
+      if (tripItems[i].key === key) { it = tripItems[i]; break; }
+    }
+    if (!it) return;
+    var wasDone = !!it.done;
+    var ov = readTripOverrides();
+    ov[key] = !wasDone;
+    writeTripOverrides(ov);
+    updateTripStates();
+    toast(wasDone ? "완료 표시를 해제했습니다" : "완료로 표시했습니다");
+  }
+
   function renderTrip(trip) {
     if (!tripHost) return;
     if (!trip) {
       tripHost.innerHTML = '<div class="memo-empty">표시할 여행 일정이 없습니다.</div>';
       return;
     }
+    tripData = trip;
     if (trip.title) document.getElementById("tripTitle").textContent = trip.title;
     var sub = [];
     if (trip.dates) sub.push(trip.dates);
@@ -1339,24 +1549,34 @@
     document.getElementById("tripSub").textContent = sub.join(" · ");
 
     document.getElementById("tripStats").innerHTML = (trip.stats || []).map(function (s) {
-      return '<div class="trip-stat"><b>' + esc(s.value) + "</b><span>" + esc(s.label) + "</span></div>";
+      return '<div class="trip-stat"' + (s.auto ? ' data-auto="' + esc(s.auto) + '"' : "") +
+        "><b>" + esc(s.value) + "</b><span>" + esc(s.label) + "</span></div>";
     }).join("");
+    updateTripHeroStats();
 
+    var flat = [];
     var nav = (trip.days || []).map(function (d) {
       return '<button type="button" data-day="' + esc(d.id) + '">' + esc(d.label) + " " + esc(d.date) + "</button>";
     }).join("");
 
     var days = (trip.days || []).map(function (d) {
-      var items = (d.items || []).map(function (it) {
-        return '<li class="titem' + (it.tone === "key" ? " key" : "") + '">' +
+      var items = (d.items || []).map(function (it, idx) {
+        var key = d.id + ":" + idx;
+        flat.push({
+          key: key, dayId: d.id,
+          time: it.time || "", title: it.title || "", at: it.at || "",
+          el: null, badgeEl: null, done: false
+        });
+        return '<li class="titem' + (it.tone === "key" ? " key" : "") + '" data-key="' + esc(key) + '" tabindex="0" role="button" aria-label="' + esc((it.time || "") + " " + (it.title || "") + " · 눌러서 완료 표시") + '">' +
           '<div class="tt">' + esc(it.time) + "</div>" +
-          '<div class="tbody"><div class="ttitle">' + esc(it.title) + "</div>" +
+          '<div class="tbody"><div class="trow"><div class="ttitle">' + esc(it.title) + '</div><span class="tbadge none"></span></div>' +
           (it.desc ? '<div class="tdesc">' + esc(it.desc) + "</div>" : "") +
           "</div></li>";
       }).join("");
       return '<div class="dayhead" id="day-' + esc(d.id) + '">' +
         '<div class="dh-date">' + esc(d.label) + " · " + esc(d.date) + "</div>" +
-        '<div class="dh-meta">' + (d.items || []).length + "개 일정</div></div>" +
+        '<div class="dh-meta"><b data-daycount="' + esc(d.id) + '">완료 0 / ' + (d.items || []).length + "</b></div></div>" +
+        '<div class="daybar"><div class="daybar-fill" data-daybar="' + esc(d.id) + '"></div></div>' +
         (d.title ? '<div class="day-sub">' + esc(d.title) + "</div>" : "") +
         (d.note ? '<div class="daynote">' + esc(d.note) + "</div>" : "") +
         '<ol class="tline">' + items + "</ol>";
@@ -1370,11 +1590,46 @@
 
     var tips = (trip.tips || []).map(function (t) { return "<li>" + esc(t) + "</li>"; }).join("");
 
+    var progress =
+      '<div class="trip-progress">' +
+      '<div class="tp-head"><span class="tp-label">일정 진행</span><span class="tp-count" id="tpCount">완료 0 / ' + flat.length + "</span></div>" +
+      '<div class="progress-wrap"><div class="progress-bar wait" id="tpBar" style="width:0%"></div></div>' +
+      '<div class="tp-next" id="tpNext"></div>' +
+      '<div class="tp-foot"><span class="tp-hint">시간이 지나면 자동으로 체크 · 항목을 누르면 수동 표시</span>' +
+      '<button type="button" class="tp-reset" id="tpReset" hidden>수동 표시 지우기</button></div></div>';
+
     tripHost.innerHTML =
+      progress +
       (nav ? '<div class="daynav">' + nav + "</div>" : "") +
       days +
       (checklist ? '<div class="section-title">🎒 출발 전 체크리스트</div><div class="ckgrid">' + checklist + "</div>" : "") +
       (tips ? '<div class="section-title">💡 현지 팁</div><div class="card"><ul class="tiplist">' + tips + "</ul></div>" : "");
+
+    tripItems = flat;
+    Array.prototype.forEach.call(tripHost.querySelectorAll(".titem"), function (li) {
+      var key = li.getAttribute("data-key");
+      var rec = null;
+      for (var i = 0; i < tripItems.length; i++) {
+        if (tripItems[i].key === key) { rec = tripItems[i]; break; }
+      }
+      if (!rec) return;
+      rec.el = li;
+      rec.badgeEl = li.querySelector(".tbadge");
+      li.addEventListener("click", function () { toggleTripItem(rec.key); });
+      li.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") {
+          e.preventDefault();
+          toggleTripItem(rec.key);
+        }
+      });
+    });
+
+    var resetBtn = document.getElementById("tpReset");
+    if (resetBtn) resetBtn.addEventListener("click", function () {
+      writeTripOverrides({});
+      updateTripStates();
+      toast("수동 표시를 지웠습니다 · 시간 기준으로 돌아갑니다");
+    });
 
     Array.prototype.forEach.call(tripHost.querySelectorAll(".daynav button"), function (btn) {
       btn.addEventListener("click", function () {
@@ -1385,6 +1640,7 @@
       });
     });
     tripRendered = true;
+    updateTripStates();
   }
 
   /* ---------- 로드 ---------- */
@@ -1431,6 +1687,12 @@
   }
 
   refreshBtn.addEventListener("click", function () { load(true); });
+  setInterval(function () {
+    if (tripItems.length) updateTripStates();
+  }, 30000);
+  document.addEventListener("visibilitychange", function () {
+    if (!document.hidden && tripItems.length) updateTripStates();
+  });
   renderMemos();
   showView(viewFromHash(), { hash: false });
   load(false);
